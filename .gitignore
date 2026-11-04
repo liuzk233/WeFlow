@@ -21,3 +21,6 @@ CLAUDE.md
 .gemini/
 .claude/
 .codex/
+
+# Local P0 tooling, caches and verification logs
+.p0-local/
