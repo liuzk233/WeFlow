@@ -34,6 +34,7 @@ export { normalizeCopyContainer, stripCopyMetadata };
 
 interface CopyToWechatOptions {
   showMacBar?: boolean;
+  showCodeLineNumbers?: boolean;
 }
 
 export interface WechatContainerOptions extends CopyToWechatOptions {
@@ -56,52 +57,6 @@ const buildCopyCss = (themeCss: string) => {
   return `${expandedCss}\n${katexCss}`;
 };
 
-// 微信不转存 45×13 这类小尺寸 data: URI，保存草稿时会被剥离（#91），故改用托管外链。
-// Mermaid、公式等较大的 data: URI 不受此限制。
-const MAC_SIGN_IMAGE_URL = "https://img.wemd.app/1785143461387_dwk0yi.svg";
-
-const renderMacSignDotsToImages = (container: HTMLElement): void => {
-  container.querySelectorAll<HTMLElement>(".mac-sign").forEach((macSign) => {
-    const dots = Array.from(macSign.querySelectorAll<HTMLElement>(".mac-dot"));
-    if (dots.length === 0) return;
-
-    const dotMetrics = dots.map((dot) => ({
-      height: Number.parseFloat(dot.style.height),
-      marginRight: Number.parseFloat(dot.style.marginRight) || 0,
-      marginTop: Number.parseFloat(dot.style.marginTop) || 0,
-      width: Number.parseFloat(dot.style.width),
-    }));
-    const width = dotMetrics.reduce(
-      (total, dot) => total + dot.width + dot.marginRight,
-      0,
-    );
-    const height =
-      Number.parseFloat(macSign.style.height) ||
-      Math.max(...dotMetrics.map((dot) => dot.marginTop + dot.height));
-    if (!width || !height) {
-      console.warn("Mac Bar 圆点尺寸推导失败，保留 HTML 圆点", {
-        height,
-        width,
-      });
-      return;
-    }
-
-    const image = document.createElement("img");
-    image.src = MAC_SIGN_IMAGE_URL;
-    image.alt = "";
-    image.width = width;
-    image.height = height;
-    image.style.display = "block";
-    image.style.setProperty("width", `${width}px`, "important");
-    image.style.setProperty("height", `${height}px`, "important");
-    image.style.setProperty("max-width", `${width}px`, "important");
-    image.style.setProperty("max-height", `${height}px`, "important");
-
-    macSign.removeAttribute("aria-hidden");
-    macSign.replaceChildren(image);
-  });
-};
-
 /**
  * 将 HTML 中的 checkbox 转换为 emoji
  * 微信公众号会过滤 <input> 标签，需要转为 emoji 替代
@@ -118,7 +73,24 @@ const convertCheckboxesToEmoji = (html: string): string => {
 
 // ── 剪贴板写入策略 ─────────────────────────────────
 
+const plainTextByContainer = new WeakMap<HTMLElement, string>();
+
 const getRenderedPlainText = (container: HTMLElement): string => {
+  const savedText = plainTextByContainer.get(container);
+  if (savedText !== undefined) return savedText;
+  const numbered = container.querySelector(".code-gutter");
+  if (numbered) {
+    const clone = container.cloneNode(true) as HTMLElement;
+    clone.querySelectorAll("pre.custom").forEach((pre) => {
+      const lines = Array.from(pre.querySelectorAll(".code-line"));
+      if (lines.length)
+        pre.textContent =
+          lines
+            .map((line) => line.textContent?.replace(/\u00a0/g, " ") ?? "")
+            .join("\n") + "\n";
+    });
+    return clone.textContent || "";
+  }
   const innerText = container.innerText;
   if (typeof innerText === "string" && innerText.trim().length > 0) {
     return innerText;
@@ -275,6 +247,7 @@ export async function renderWechatContainer(
     const parser = createMarkdownParser({
       mathRenderer: "katex",
       showMacBar: options.showMacBar === true,
+      ...(options.showCodeLineNumbers ? { showCodeLineNumbers: true } : {}),
     });
     const rawHtml = parser.render(markdown);
     const themedCss = buildCopyCss(css);
@@ -286,6 +259,19 @@ export async function renderWechatContainer(
       sourceHtml,
       themedCss,
     );
+    if (options.showCodeLineNumbers) {
+      container.innerHTML = materializedHtml;
+      container.querySelectorAll("pre.custom").forEach((pre) => {
+        const lines = Array.from(pre.querySelectorAll(".code-line"));
+        if (lines.length)
+          pre.textContent =
+            lines.map((line) => line.textContent || "").join("\n") + "\n";
+      });
+      plainTextByContainer.set(
+        container,
+        container.innerText || container.textContent || "",
+      );
+    }
     const styledHtml = processHtml(materializedHtml, sanitizedCss, true, true);
     const resolvedHtml = resolveInlineStyleVariablesForCopy(styledHtml);
     const finalHtml = convertCheckboxesToEmoji(resolvedHtml);
@@ -298,9 +284,13 @@ export async function renderWechatContainer(
       container,
       options.tableWrap ?? getPublishingPreference("tableWrap"),
     );
-    renderMacSignDotsToImages(container);
     const { requiresExactHtmlTransport } = normalizeCopyContainer(container);
-    return { container, requiresExactHtmlTransport, mathFallback };
+    return {
+      container,
+      requiresExactHtmlTransport:
+        requiresExactHtmlTransport || !!options.showCodeLineNumbers,
+      mathFallback,
+    };
   } catch (error) {
     container.remove();
     throw error;
@@ -334,7 +324,7 @@ export async function copyToWechat(
           copied = electronResult.success;
           if (!electronResult.success) {
             console.warn(
-              "[WeMD] Electron clipboard bridge unavailable, fallback to browser copy chain",
+              "[WeFlow] Electron clipboard bridge unavailable, fallback to browser copy chain",
               electronResult.error || "unknown error",
             );
           }
@@ -350,7 +340,7 @@ export async function copyToWechat(
 
     if (!copied && navigator.clipboard && window.ClipboardItem) {
       console.warn(
-        "[WeMD] native execCommand copy unavailable, fallback to Clipboard API",
+        "[WeFlow] native execCommand copy unavailable, fallback to Clipboard API",
       );
       try {
         const blob = new Blob([container.innerHTML], { type: "text/html" });

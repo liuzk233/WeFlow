@@ -76,6 +76,46 @@ describe("exportLongImage", () => {
     expect(download).toHaveBeenCalledTimes(2);
   });
 
+  it("长图将折行后的行号高度与源代码行对齐", async () => {
+    vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:long-image");
+    vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => undefined);
+    vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(
+      () => undefined,
+    );
+    mocked.renderWechatContainer.mockImplementation(async () => {
+      const container = document.createElement("div");
+      container.innerHTML =
+        '<span class="code-frame"><span class="code-gutter"><span class="code-number">1</span><span class="code-number">2</span></span><span class="code-scroll"><code><span class="code-line">long source</span><span class="code-line">next</span></code></span></span>';
+      const lines = container.querySelectorAll<HTMLElement>(".code-line");
+      vi.spyOn(lines[0], "getBoundingClientRect").mockReturnValue(
+        new DOMRect(0, 0, 200, 66),
+      );
+      vi.spyOn(lines[1], "getBoundingClientRect").mockReturnValue(
+        new DOMRect(0, 0, 200, 22),
+      );
+      document.body.appendChild(container);
+      return { container };
+    });
+    mocked.toCanvas.mockImplementation(async (container: HTMLElement) => {
+      expect(
+        Array.from(container.querySelectorAll<HTMLElement>(".code-number")).map(
+          (n) => n.style.height,
+        ),
+      ).toEqual(["66px", "22px"]);
+      expect(
+        (container.querySelector(".code-line") as HTMLElement).style.whiteSpace,
+      ).toBe("pre-wrap");
+      return fakeCanvas;
+    });
+    await exportLongImage("# code", "", { showCodeLineNumbers: true });
+    expect(mocked.renderWechatContainer).toHaveBeenCalledWith("# code", "", {
+      showCodeLineNumbers: true,
+      width: "375px",
+      tableWrap: true,
+    });
+    expect(mocked.toCanvas).toHaveBeenCalledTimes(1);
+  });
+
   it("2D 上下文没有 roundRect 时用 arcTo 画圆角，含图导出不抛错", async () => {
     vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:long-image");
     vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => undefined);

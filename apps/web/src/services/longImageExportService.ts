@@ -36,7 +36,7 @@ export function computeExportPixelRatio(width: number, height: number): number {
 
 const buildFileName = (markdown: string): string => {
   const heading = markdown.match(/^#{1,2}\s+(.+)$/m)?.[1]?.trim();
-  const name = (heading || "WeMD 长图").replace(/[\\/:*?"<>|]/g, "_");
+  const name = (heading || "WeFlow 长图").replace(/[\\/:*?"<>|]/g, "_");
   return `${name}.png`;
 };
 
@@ -193,7 +193,10 @@ let exporting = false;
 export async function exportLongImage(
   markdown: string,
   css: string,
-  options: Pick<WechatContainerOptions, "showMacBar"> = {},
+  options: Pick<
+    WechatContainerOptions,
+    "showMacBar" | "showCodeLineNumbers"
+  > = {},
 ): Promise<void> {
   if (exporting) return;
   exporting = true;
@@ -213,6 +216,29 @@ export async function exportLongImage(
       code.style.whiteSpace = "pre-wrap";
       code.style.overflowWrap = "anywhere";
     });
+    // Each source line may wrap; resize its separate gutter entry to match.
+    container
+      .querySelectorAll<HTMLElement>(".code-scroll")
+      .forEach((scroll) => {
+        scroll.style.overflowX = "visible";
+        const code = scroll.querySelector<HTMLElement>("code");
+        if (code) {
+          code.style.width = "auto";
+          code.style.minWidth = "0";
+        }
+        const lines = Array.from(
+          scroll.querySelectorAll<HTMLElement>(".code-line"),
+        );
+        const numbers =
+          scroll.parentElement?.querySelectorAll<HTMLElement>(".code-number");
+        lines.forEach((line, index) => {
+          line.style.whiteSpace = "pre-wrap";
+          line.style.overflowWrap = "anywhere";
+          if (numbers?.[index])
+            numbers[index].style.height =
+              `${line.getBoundingClientRect().height}px`;
+        });
+      });
     // 滑动图组在长图里改为纵向排列，全部图片都显示；去掉「左右滑动」提示
     container
       .querySelectorAll<HTMLElement>(".imageflow-layer2")

@@ -4,6 +4,7 @@
  */
 import {
   basicTheme,
+  weflowTechTheme,
   codeGithubDarkTheme,
   customDefaultTheme,
   codeGithubTheme,
@@ -40,6 +41,7 @@ export interface CustomTheme {
   name: string;
   css: string;
   isBuiltIn: boolean;
+  showCodeLineNumbers?: boolean;
   /** 是否允许用户主动选择；设为 false 的内置主题仅用于兼容历史文章 */
   isSelectable?: boolean;
   createdAt: string;
@@ -70,6 +72,15 @@ export const builtInThemes: CustomTheme[] = [
     id: "default",
     name: "默认主题",
     css: basicTheme + "\n" + customDefaultTheme + "\n" + codeGithubTheme,
+    isBuiltIn: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+  {
+    id: "weflow-tech",
+    name: "简洁技术",
+    css: basicTheme + "\n" + codeGithubTheme + "\n" + weflowTechTheme,
+    showCodeLineNumbers: true,
     isBuiltIn: true,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),

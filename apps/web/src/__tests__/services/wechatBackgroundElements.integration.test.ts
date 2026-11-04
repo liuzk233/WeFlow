@@ -229,7 +229,7 @@ describe("公众号背景文章综合元素复制", () => {
     expect(root.querySelector(".callout .callout-title")).toBeTruthy();
     expect(root.querySelectorAll("li")).toHaveLength(2);
     expect(root.querySelector("table td")?.textContent).toBe("背景");
-    expect(root.querySelector("pre.custom > .mac-sign > img")).toBeTruthy();
+    expect(root.querySelector("pre.custom > .mac-sign > .mac-dot")).toBeTruthy();
     expect(root.querySelector("pre.custom > code")?.textContent).toContain(
       'const background = "section";',
     );

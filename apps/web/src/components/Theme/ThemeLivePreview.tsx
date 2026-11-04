@@ -1,3 +1,4 @@
+import { resolveAppAssetPath } from "../../utils/assetPath";
 import { useEffect, useMemo, useRef, memo } from "react";
 import mermaid from "mermaid";
 import {
@@ -16,7 +17,7 @@ import {
 // 主题预览用的示例 Markdown 内容
 const PREVIEW_MARKDOWN = `# 一级标题示例
 
-这是一段**加粗文本**、*斜体文本*、++下划线文本++、~~删除线文本~~、==高亮文本==和 [链接示例](https://github.com/tenngoxars/WeMD)。
+这是一段**加粗文本**、*斜体文本*、++下划线文本++、~~删除线文本~~、==高亮文本==和 [链接示例](https://github.com/liuzk233/WeFlow)。
 正文段落通常需要设置行高和间距，以保证阅读体验。
 
 ---
@@ -32,7 +33,7 @@ const PREVIEW_MARKDOWN = `# 一级标题示例
 
 ### 三级标题
 
-这里演示脚注的使用：[WeChat Markdown](https://github.com/tenngoxars/WeMD "WeMD 是一款专为公众号设计的编辑器") 可以极大提升排版效率。
+这里演示脚注的使用：[WeChat Markdown](https://github.com/liuzk233/WeFlow "WeFlow 是一款专为公众号设计的编辑器") 可以极大提升排版效率。
 
 > [!TIP]
 > 这是一个提示块示例。支持切换"默认彩色"或"跟随主题色"风格，让排版更统一。
@@ -49,7 +50,7 @@ const PREVIEW_MARKDOWN = `# 一级标题示例
 
 #### 四级标题
 
-这里有 \`行内代码\` 样式，也可以用来表示 \`npm install wemd\` 等指令。
+这里有 \`行内代码\` 样式，也可以用来表示 \`pnpm dev:web\` 等指令。
 
 \`\`\`js
 // 代码块示例
@@ -69,12 +70,13 @@ flowchart TD
   Reject --> End
 \`\`\`
 
-![WeMD 示例图片：不仅支持常规排版，更可以深度定制每一个细节。](https://img.wemd.app/example.jpg)
+![WeFlow 示例图片：不仅支持常规排版，更可以深度定制每一个细节。](${resolveAppAssetPath("images/writing-flow.png")})
 `;
 
 interface ThemeLivePreviewProps {
   /** 要预览的 CSS 样式代码 */
   css: string;
+  showCodeLineNumbers?: boolean;
   designerVariables?: DesignerVariables;
   /** 是否使用当前文章内容，true=订阅 store 获取当前文章，false=使用内置示例 */
   useCurrentArticle?: boolean;
@@ -83,6 +85,7 @@ interface ThemeLivePreviewProps {
 // 主题实时预览组件（使用 iframe 隔离样式）
 export const ThemeLivePreview = memo(function ThemeLivePreview({
   css,
+  showCodeLineNumbers = false,
   designerVariables,
   useCurrentArticle = false,
 }: ThemeLivePreviewProps) {
@@ -92,8 +95,13 @@ export const ThemeLivePreview = memo(function ThemeLivePreview({
   );
   const showMacBar = designerVariables?.showMacBar ?? false;
   const parser = useMemo(
-    () => createMarkdownParser({ showMacBar, mathRenderer: "katex" }),
-    [showMacBar],
+    () =>
+      createMarkdownParser({
+        showMacBar,
+        showCodeLineNumbers,
+        mathRenderer: "katex",
+      }),
+    [showMacBar, showCodeLineNumbers],
   );
   const uiTheme = useUITheme((state) => state.theme);
   const isDarkMode = uiTheme === "dark";

@@ -126,7 +126,7 @@ title: "旧标题"
     expect(latestCall[1]).toContain('author: "Alice"');
   });
 
-  it("新建文章时继承当前选中主题", async () => {
+  it("新建文章使用简洁技术且不继承当前主题", async () => {
     const contentMap = new Map<string, string>();
     const writeFile = vi.fn(async (path: string, content: string) => {
       contentMap.set(path, content);
@@ -179,8 +179,8 @@ title: "旧标题"
       throw new Error("writeFile was not called");
     }
     const writtenContent = firstCall[1] as string;
-    expect(writtenContent).toContain("theme: custom-green");
-    expect(writtenContent).toContain('themeName: "森林绿"');
+    expect(writtenContent).toContain("theme: weflow-tech");
+    expect(writtenContent).toContain('themeName: "简洁技术"');
   });
 
   it("CRLF frontmatter 文件保存时不会重复生成 frontmatter 块", async () => {

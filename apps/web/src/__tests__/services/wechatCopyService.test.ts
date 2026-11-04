@@ -415,7 +415,7 @@ describe("wechatCopyService clipboard strategy", () => {
     expect(mermaidParagraph?.style.color).toBe("rgb(26, 26, 26)");
   });
 
-  it("复制时将 Mac Bar 圆点转换为公众号可保留的清晰远程图片", async () => {
+  it("复制时保留本地 HTML 圆点且不依赖上游装饰图片", async () => {
     mocked.processHtmlMock.mockReturnValue(MAC_BAR_HTML);
 
     Object.defineProperty(window, "electron", {
@@ -446,24 +446,12 @@ describe("wechatCopyService clipboard strategy", () => {
     ];
     const snapshot = document.createElement("div");
     snapshot.innerHTML = payload.html;
-    const image = snapshot.querySelector(
-      ".mac-sign > img",
-    ) as HTMLImageElement | null;
-
-    expect(image).toBeTruthy();
-    expect(image?.src).toBe("https://img.wemd.app/1785143461387_dwk0yi.svg");
-    expect(image?.style.width).toBe("45px");
-    expect(image?.style.height).toBe("13px");
-    expect(image?.style.getPropertyPriority("width")).toBe("important");
-    expect(image?.style.getPropertyPriority("height")).toBe("important");
-    expect(image?.style.maxWidth).toBe("45px");
-    expect(image?.style.maxHeight).toBe("13px");
-    expect(snapshot.querySelector(".mac-dot")).toBeNull();
-    expect(payload.html).not.toContain("data:image/png");
-    expect(payload.html).not.toContain("<svg");
+    expect(snapshot.querySelectorAll(".mac-dot")).toHaveLength(3);
+    expect(snapshot.querySelector(".mac-sign img")).toBeNull();
+    expect(payload.html).not.toContain("img.wemd.app");
   });
 
-  it("Mac Bar 圆点尺寸无法推导时保留 HTML 圆点并继续复制", async () => {
+  it("没有尺寸元数据时仍保留 HTML 圆点并继续复制", async () => {
     mocked.processHtmlMock.mockReturnValue(MAC_BAR_HTML_WITHOUT_METRICS);
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
@@ -488,9 +476,6 @@ describe("wechatCopyService clipboard strategy", () => {
     ];
     expect(payload.html.match(/class="mac-dot"/g)).toHaveLength(3);
     expect(payload.html).not.toContain("<img");
-    expect(warnSpy).toHaveBeenCalledWith(
-      "Mac Bar 圆点尺寸推导失败，保留 HTML 圆点",
-      expect.objectContaining({ width: Number.NaN }),
-    );
+    expect(warnSpy).not.toHaveBeenCalled();
   });
 });

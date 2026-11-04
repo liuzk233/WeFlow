@@ -3,6 +3,8 @@ import { useEditorStore, defaultMarkdown } from "../../store/editorStore";
 import { useThemeStore } from "../../store/themeStore";
 import { useHistoryStore } from "../../store/historyStore";
 
+import { DEFAULT_NEW_ARTICLE_THEME } from "../../utils/newArticleTheme";
+
 const AUTO_SAVE_INTERVAL = 10 * 1000; // 10 秒 - Web 存储的较好平衡点
 const UNTITLED_TITLE = "未命名文章";
 
@@ -108,21 +110,32 @@ export function HistoryManager() {
     if (storeLoading) return;
 
     if (!currentActiveId && currentHistory.length === 0 && markdown.trim()) {
+      selectTheme(DEFAULT_NEW_ARTICLE_THEME.themeId);
+      setCustomCSS("");
       creatingInitialSnapshotRef.current = true;
       void saveSnapshot(
         {
           markdown,
-          theme,
-          customCSS,
+          theme: DEFAULT_NEW_ARTICLE_THEME.themeId,
+          customCSS: "",
           title: deriveTitle(markdown),
-          themeName,
+          themeName: DEFAULT_NEW_ARTICLE_THEME.themeName,
         },
         { force: true },
       ).finally(() => {
         creatingInitialSnapshotRef.current = false;
       });
     }
-  }, [markdown, theme, customCSS, themeName, saveSnapshot, loading]);
+  }, [
+    markdown,
+    theme,
+    customCSS,
+    themeName,
+    saveSnapshot,
+    loading,
+    selectTheme,
+    setCustomCSS,
+  ]);
 
   const persistLatestSnapshot = useCallback(async () => {
     const snapshot = latestRef.current;

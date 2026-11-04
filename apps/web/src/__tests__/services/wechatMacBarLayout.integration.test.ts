@@ -107,7 +107,7 @@ describe("公众号背景文章的 Mac Bar 布局", () => {
     const macSign = snapshot.querySelector(
       "pre.custom > .mac-sign",
     ) as HTMLElement | null;
-    const image = macSign?.querySelector("img") as HTMLImageElement | null;
+    const image = macSign?.querySelector(".mac-dot") as HTMLElement | null;
     const code = snapshot.querySelector(
       "pre.custom > code",
     ) as HTMLElement | null;
@@ -122,7 +122,7 @@ describe("公众号背景文章的 Mac Bar 布局", () => {
         root?.style.item(index),
       ).filter((name) => name?.startsWith("--")),
     ).toEqual([]);
-    expect(image?.src).toBe("https://img.wemd.app/1785143461387_dwk0yi.svg");
+    expect(image?.style.width).toBe("10px");
     expect(macSign?.nextElementSibling).toBe(code);
     expect(code?.style.display).toBe("block");
     expect(plainPre?.style.padding).toBe("14px");

@@ -1,7 +1,7 @@
 export const materializeCodeLineBreaksForWechat = (
   container: HTMLElement,
 ): void => {
-  container.querySelectorAll<HTMLElement>("pre > code").forEach((code) => {
+  container.querySelectorAll<HTMLElement>("pre code").forEach((code) => {
     const walker = document.createTreeWalker(code, NodeFilter.SHOW_TEXT);
     const textNodes: Text[] = [];
     let current = walker.nextNode();
@@ -12,6 +12,11 @@ export const materializeCodeLineBreaksForWechat = (
 
     textNodes.forEach((textNode) => {
       const text = textNode.data;
+      if (code.querySelector(".code-line")) {
+        textNode.data = text
+          .replace(/ /g, "\u00a0")
+          .replace(/\t/g, "\u00a0\u00a0");
+      }
       if (!/[\r\n]/.test(text)) return;
 
       const lines = text.split(/\r\n?|\n/);

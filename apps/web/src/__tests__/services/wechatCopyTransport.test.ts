@@ -285,7 +285,7 @@ describe("wechatCopyService 原生剪贴板传输", () => {
     const macSign = snapshot.querySelector(
       "pre.custom > .mac-sign",
     ) as HTMLElement | null;
-    const image = macSign?.querySelector("img") as HTMLImageElement | null;
+    const image = macSign?.querySelector(".mac-dot") as HTMLElement | null;
     const code = snapshot.querySelector(
       "pre.custom > code",
     ) as HTMLElement | null;
@@ -297,7 +297,7 @@ describe("wechatCopyService 原生剪贴板传输", () => {
     expect(root?.style.backgroundImage).toContain("repeating-linear-gradient");
     expect(image).toBeTruthy();
     expect(macSign?.nextElementSibling).toBe(code);
-    expect(snapshot.querySelector(".mac-dot")).toBeNull();
+    expect(snapshot.querySelectorAll(".mac-dot")).toHaveLength(3);
     expect(plainPre?.style.padding).toBe("14px");
     expect(pre?.style.padding).toBe("0px");
     expect(macSign?.style.paddingTop).toBe("10px");

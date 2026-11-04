@@ -63,6 +63,7 @@ export const processHtml = (
   html = html.replace(
     /<code([^>]*class="[^"]*\bhljs\b[^"]*"[^>]*)>([\s\S]*?)<\/code>/g,
     (match, attrs: string, inner: string) => {
+      if (inner.includes('class="code-line"')) return match;
       let protected_ = inner;
       protected_ = protected_.replace(/\t/g, "&nbsp;&nbsp;");
       protected_ = protected_.replace(/<\/span> <span/g, " </span><span");

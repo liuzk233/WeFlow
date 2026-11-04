@@ -19,3 +19,5 @@ export * from "./receipt";
 export * from "./sunset-film";
 export * from "./template";
 export * from "./whitespace-gallery";
+
+export * from "./weflow-tech";

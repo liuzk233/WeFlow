@@ -16,23 +16,15 @@ export interface NewArticleThemeSnapshot {
 }
 
 export const DEFAULT_NEW_ARTICLE_THEME: NewArticleThemeSnapshot = {
-  themeId: "default",
-  themeName: "默认主题",
+  themeId: "weflow-tech",
+  themeName: "简洁技术",
   customCSS: "",
 };
 
+// Keep the shared call signature so every creation entry uses the same policy.
 export function resolveNewArticleThemeSnapshot(
-  themeState: ThemeStateLike,
-  themes: ThemeOptionLike[],
+  _themeState?: ThemeStateLike,
+  _themes?: ThemeOptionLike[],
 ): NewArticleThemeSnapshot {
-  const matchedTheme = themes.find((item) => item.id === themeState.themeId);
-  if (!matchedTheme) {
-    return { ...DEFAULT_NEW_ARTICLE_THEME };
-  }
-
-  return {
-    themeId: matchedTheme.id,
-    themeName: matchedTheme.name || themeState.themeName || "默认主题",
-    customCSS: themeState.customCSS ?? "",
-  };
+  return { ...DEFAULT_NEW_ARTICLE_THEME };
 }

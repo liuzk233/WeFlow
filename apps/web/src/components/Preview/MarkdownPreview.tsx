@@ -98,6 +98,7 @@ export function MarkdownPreview({
       state.getAllThemes().find((t) => t.id === state.themeId),
   );
   const designerVars = currentTheme?.designerVariables;
+  const showCodeLineNumbers = currentTheme?.showCodeLineNumbers ?? false;
   const showMacBar = designerVars?.showMacBar ?? false;
   const useMathJaxForPreview = needsMathJaxPreview(markdown);
 
@@ -127,10 +128,11 @@ export function MarkdownPreview({
     () =>
       createMarkdownParser({
         showMacBar,
+        showCodeLineNumbers,
         mathRenderer: useMathJaxForPreview && mathJaxReady ? "auto" : "katex",
         includeSourcePosition: true,
       }),
-    [showMacBar, useMathJaxForPreview, mathJaxReady],
+    [showMacBar, showCodeLineNumbers, useMathJaxForPreview, mathJaxReady],
   );
 
   useEffect(() => {

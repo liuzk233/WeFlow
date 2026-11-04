@@ -264,6 +264,9 @@ export function ThemePanelView({
                   </div>
                   <ThemeLivePreview
                     css={previewCss}
+                    showCodeLineNumbers={
+                      selectedTheme?.showCodeLineNumbers ?? false
+                    }
                     designerVariables={
                       isVisualEditing ? designerVariables : undefined
                     }

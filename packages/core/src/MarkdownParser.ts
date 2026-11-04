@@ -1,5 +1,6 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
 /// <reference path="./types/markdown-it-plugins.d.ts" />
+import { renderNumberedCode } from "./codeLines";
 import MarkdownIt from "markdown-it";
 import markdownItDeflist from "markdown-it-deflist";
 import markdownItImplicitFigures from "markdown-it-implicit-figures";
@@ -38,6 +39,7 @@ import highlightjs from "./utils/langHighlight";
 
 export interface MarkdownParserOptions {
   showMacBar?: boolean;
+  showCodeLineNumbers?: boolean;
   mathRenderer?: "auto" | "katex";
   includeSourcePosition?: boolean;
 }
@@ -74,9 +76,10 @@ export const createMarkdownParser = (options: MarkdownParserOptions = {}) => {
           return (
             '<pre class="custom">' +
             macSign +
-            '<code class="hljs">' +
-            formatted +
-            "</code></pre>"
+            (options.showCodeLineNumbers
+              ? renderNumberedCode(formatted)
+              : '<code class="hljs">' + formatted + "</code>") +
+            "</pre>"
           );
         } catch {
           // Ignore highlight errors
@@ -86,9 +89,12 @@ export const createMarkdownParser = (options: MarkdownParserOptions = {}) => {
       return (
         '<pre class="custom">' +
         macSign +
-        '<code class="hljs">' +
-        markdownParser.utils.escapeHtml(str) +
-        "</code></pre>"
+        (options.showCodeLineNumbers
+          ? renderNumberedCode(markdownParser.utils.escapeHtml(str))
+          : '<code class="hljs">' +
+            markdownParser.utils.escapeHtml(str) +
+            "</code>") +
+        "</pre>"
       );
     },
   });

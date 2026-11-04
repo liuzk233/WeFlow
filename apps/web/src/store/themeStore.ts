@@ -114,10 +114,16 @@ export interface ThemeStore extends WorkspaceThemeSlice {
     editorMode: "visual" | "css",
     css?: string,
     designerVariables?: DesignerVariables,
+    showCodeLineNumbers?: boolean,
   ) => CustomTheme;
   updateTheme: (
     id: string,
-    updates: Partial<Pick<CustomTheme, "name" | "css" | "designerVariables">>,
+    updates: Partial<
+      Pick<
+        CustomTheme,
+        "name" | "css" | "designerVariables" | "showCodeLineNumbers"
+      >
+    >,
   ) => void;
   deleteTheme: (id: string) => void;
   duplicateTheme: (id: string, newName: string) => CustomTheme;
@@ -150,8 +156,8 @@ export const useThemeStore = create<ThemeStore>((set, get) => {
       clearDarkCssCache,
       saveSelectedTheme,
     }),
-    themeId: initialSelectedTheme?.id ?? "default",
-    themeName: initialSelectedTheme?.name ?? "默认主题",
+    themeId: initialSelectedTheme?.id ?? "weflow-tech",
+    themeName: initialSelectedTheme?.name ?? "简洁技术",
     customCSS: "",
     customThemes: loadMirrorThemes(),
 
@@ -213,6 +219,7 @@ export const useThemeStore = create<ThemeStore>((set, get) => {
       editorMode: "visual" | "css",
       css?: string,
       designerVariables?: DesignerVariables,
+      showCodeLineNumbers?: boolean,
     ) => {
       const state = get();
       const trimmedName = name.trim() || "未命名主题";
@@ -227,6 +234,7 @@ export const useThemeStore = create<ThemeStore>((set, get) => {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
         editorMode,
+        showCodeLineNumbers,
         designerVariables:
           editorMode === "visual" ? designerVariables : undefined,
       };
@@ -241,7 +249,12 @@ export const useThemeStore = create<ThemeStore>((set, get) => {
 
     updateTheme: (
       id: string,
-      updates: Partial<Pick<CustomTheme, "name" | "css" | "designerVariables">>,
+      updates: Partial<
+        Pick<
+          CustomTheme,
+          "name" | "css" | "designerVariables" | "showCodeLineNumbers"
+        >
+      >,
     ) => {
       const state = get();
       const themeIndex = state.customThemes.findIndex((t) => t.id === id);
@@ -319,6 +332,7 @@ export const useThemeStore = create<ThemeStore>((set, get) => {
         editorMode,
         sourceTheme.css,
         sourceTheme.designerVariables,
+        sourceTheme.showCodeLineNumbers,
       );
     },
 
@@ -335,6 +349,7 @@ export const useThemeStore = create<ThemeStore>((set, get) => {
         name: theme.name,
         editorMode: "visual",
         designerVariables: theme.designerVariables,
+        showCodeLineNumbers: theme.showCodeLineNumbers,
       };
 
       const blob = new Blob([JSON.stringify(exportData, null, 2)], {
@@ -398,7 +413,13 @@ export const useThemeStore = create<ThemeStore>((set, get) => {
         }
 
         const css = generateCSS(data.designerVariables);
-        get().createTheme(finalName, "visual", css, data.designerVariables);
+        get().createTheme(
+          finalName,
+          "visual",
+          css,
+          data.designerVariables,
+          data.showCodeLineNumbers === true,
+        );
         return true;
       } catch (error) {
         console.error("导入主题失败:", error);
