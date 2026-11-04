@@ -1,4 +1,4 @@
-import { Globe, BookOpen } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { useUITheme } from "../../hooks/useUITheme";
 import { resolveAppAssetPath } from "../../utils/assetPath";
 import "./SidebarFooter.css";
@@ -33,13 +33,13 @@ export function SidebarFooter() {
           <img src={logoSrc} alt="Logo" />
         </div>
         <div className="footer-info">
-          <span className="footer-name">WeMD</span>
+          <span className="footer-name">WeFlow</span>
           <span className="footer-version">v{__APP_VERSION__}</span>
         </div>
       </div>
       <div className="footer-links">
         <a
-          href="https://github.com/tenngoxars/WeMD"
+          href="https://github.com/liuzk233/WeFlow"
           target="_blank"
           rel="noopener noreferrer"
           data-tooltip="GitHub 仓库"
@@ -48,16 +48,7 @@ export function SidebarFooter() {
           <GithubIcon size={16} />
         </a>
         <a
-          href="https://wemd.app"
-          target="_blank"
-          rel="noopener noreferrer"
-          data-tooltip="官方网站"
-          aria-label="官方网站"
-        >
-          <Globe size={16} />
-        </a>
-        <a
-          href="https://wemd.app/docs"
+          href="https://github.com/liuzk233/WeFlow/blob/main/docs/writing.md"
           target="_blank"
           rel="noopener noreferrer"
           data-tooltip="帮助文档"

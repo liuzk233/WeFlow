@@ -1,6 +1,6 @@
-# WeMD Web
+# WeFlow Web
 
-`apps/web` 是 WeMD 的 React + Vite 前端应用，承载 Markdown 编辑、预览、复制到公众号、主题管理、图床设置、历史记录和文件系统模式等核心体验。
+`apps/web` 是 WeFlow 的 React + Vite 前端应用，承载 Markdown 编辑、预览、复制到公众号、主题管理、图床设置、历史记录和文件系统模式等核心体验。
 
 ## 目录结构
 

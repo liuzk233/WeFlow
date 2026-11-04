@@ -33,7 +33,7 @@ export function createWindow({
     // 避免边缘触发横向滚动,并保证拖到最窄时预览 402px 画布不被挤压
     minWidth: 1100,
     minHeight: 640,
-    title: "WeMD",
+    title: "WeFlow",
     icon: windowIcon,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
@@ -59,9 +59,9 @@ export function createWindow({
       ? "http://localhost:5173"
       : `file://${path.join(process.resourcesPath, "web-dist", "index.html")}`;
 
-  console.log("[WeMD] Loading URL:", startUrl);
-  console.log("[WeMD] isDev:", isDev);
-  console.log("[WeMD] resourcesPath:", process.resourcesPath);
+  console.log("[WeFlow] Loading URL:", startUrl);
+  console.log("[WeFlow] isDev:", isDev);
+  console.log("[WeFlow] resourcesPath:", process.resourcesPath);
 
   mainWindow.loadURL(startUrl);
 
@@ -77,6 +77,8 @@ export function createWindow({
 }
 
 export function configureAppIdentity(): void {
-  app.setName("WeMD");
+  const compatibleUserData = path.join(app.getPath("appData"), "WeMD");
+  app.setName("WeFlow");
+  app.setPath("userData", compatibleUserData);
   app.setAppUserModelId("com.wemd.app");
 }

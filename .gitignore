@@ -24,3 +24,5 @@ CLAUDE.md
 
 # Local P0 tooling, caches and verification logs
 .p0-local/
+
+.playwright-cli/

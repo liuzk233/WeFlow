@@ -3,15 +3,15 @@ import { BrowserWindow, Menu, shell } from "electron";
 export function createMenu(getWindow: () => BrowserWindow | null): void {
   const template: Electron.MenuItemConstructorOptions[] = [
     {
-      label: "WeMD",
+      label: "WeFlow",
       submenu: [
-        { role: "about", label: "关于 WeMD" },
+        { role: "about", label: "关于 WeFlow" },
         { type: "separator" },
-        { role: "hide", label: "隐藏 WeMD" },
+        { role: "hide", label: "隐藏 WeFlow" },
         { role: "hideOthers", label: "隐藏其他" },
         { role: "unhide", label: "显示全部" },
         { type: "separator" },
-        { role: "quit", label: "退出 WeMD" },
+        { role: "quit", label: "退出 WeFlow" },
       ],
     },
     {
@@ -81,12 +81,12 @@ export function createMenu(getWindow: () => BrowserWindow | null): void {
         },
         { type: "separator" },
         {
-          label: "访问官网",
-          click: () => shell.openExternal("https://wemd.app"),
+          label: "写作帮助",
+          click: () => shell.openExternal("https://github.com/liuzk233/WeFlow/blob/main/docs/writing.md"),
         },
         {
           label: "GitHub 仓库",
-          click: () => shell.openExternal("https://github.com/tenngoxars/WeMD"),
+          click: () => shell.openExternal("https://github.com/liuzk233/WeFlow"),
         },
       ],
     },

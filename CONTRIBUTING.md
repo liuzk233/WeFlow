@@ -1,10 +1,10 @@
 # 贡献指南
 
-感谢你愿意改进 WeMD。WeMD 是面向微信公众号创作者的本地优先 Markdown 排版工具，贡献时请优先保证写作、预览、复制到公众号和本地文件体验稳定。
+感谢你愿意改进 WeFlow。WeFlow 是面向微信公众号创作者的本地优先 Markdown 排版工具，贡献时请优先保证写作、预览、复制到公众号和本地文件体验稳定。
 
 ## 开始之前
 
-- 先搜索现有 [Issues](https://github.com/tenngoxars/WeMD/issues)，避免重复处理同一个问题。
+- 先搜索现有 [Issues](https://github.com/liuzk233/WeFlow/issues)，避免重复处理同一个问题。
 - 较大的功能或行为调整，建议先通过 Issue 说明背景、影响范围和预期方案。
 - 不要提交密钥、私有配置、构建产物、上传产物或本地缓存文件。
 
@@ -37,7 +37,7 @@ pnpm --filter wemd-electron run build:linux
 ## 项目结构
 
 ```
-WeMD/
+WeFlow/
 ├── apps/
 │   ├── web/        # React + Vite 前端
 │   ├── electron/   # Electron 桌面端

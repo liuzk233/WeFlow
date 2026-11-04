@@ -32,8 +32,8 @@ export default defineConfig({
         "pwa/icon-maskable-512.png",
       ],
       manifest: {
-        name: "WeMD - 微信公众号 Markdown 排版编辑器",
-        short_name: "WeMD",
+        name: "WeFlow - 微信公众号 Markdown 排版编辑器",
+        short_name: "WeFlow",
         description:
           "专为微信公众号设计的 Markdown 编辑器，一键复制到公众号，多种精美主题可选，开源免费，本地优先，无需登录即可使用。",
         lang: "zh-CN",

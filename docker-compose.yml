@@ -1,6 +1,7 @@
 services:
   web:
-    image: ${WEMD_IMAGE:-ghcr.io/tenngoxars/wemd-web:latest}
+    build: .
+    image: weflow-web:local
     ports:
       - "${WEMD_PORT:-8080}:80"
     restart: unless-stopped

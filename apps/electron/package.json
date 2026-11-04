@@ -1,9 +1,9 @@
 {
   "name": "wemd-electron",
   "version": "1.6.0",
-  "description": "WeMD - 更优雅的 Markdown 公众号排版工具",
+  "description": "WeFlow - 本地优先的技术图文写作工具",
   "main": "dist/main.js",
-  "homepage": "https://wemd.app",
+  "homepage": "https://github.com/liuzk233/WeFlow",
   "author": "WeMD Team",
   "scripts": {
     "build": "rimraf dist && tsc",

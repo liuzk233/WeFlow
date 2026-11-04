@@ -1,6 +1,6 @@
 {
   "appId": "com.wemd.app",
-  "productName": "WeMD",
+  "productName": "WeFlow",
   "directories": {
     "output": "release"
   },

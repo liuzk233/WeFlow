@@ -1,6 +1,6 @@
-# WeMD Electron
+# WeFlow Electron
 
-`apps/electron` 是 WeMD 桌面端外壳，复用 Web 端构建产物，并提供窗口、菜单、文件系统、剪贴板、工作区监听和更新检查等桌面能力。
+`apps/electron` 是 WeFlow 桌面端外壳，复用 Web 端构建产物，并提供窗口、菜单、文件系统、剪贴板、工作区监听和更新检查等桌面能力。
 
 ## 目录结构
 
@@ -43,8 +43,10 @@ pnpm --filter wemd-electron run build:linux
 
 当前打包配置：
 
-- macOS：`zip`，自动发布 Apple Silicon 版本。
+- macOS：`zip`，本地构建 Apple Silicon 版本。
 - Windows：NSIS 安装包。
 - Linux：AppImage。
+
+自动发布和运行时更新已停用；安装包显示名称为 WeFlow，应用 ID 与原用户数据目录保持兼容。
 
 构建产物输出到 `apps/electron/release/`，不要手工编辑构建产物。

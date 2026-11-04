@@ -90,7 +90,7 @@ export function SyntaxHelpPopover() {
 
   const openDocs = () => {
     window.open(
-      "https://wemd.app/docs/reference/markdown-syntax",
+      "https://github.com/liuzk233/WeFlow/blob/main/docs/writing.md",
       "_blank",
       "noopener,noreferrer",
     );

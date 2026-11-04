@@ -160,9 +160,9 @@ export function Header() {
         style={headerStyle}
       >
         <div className="header-left">
-          <div className="logo" aria-label="WeMD 编辑器">
-            <img className="logo-mark" src={logoSrc} alt="WeMD Logo" />
-            <span className="logo-text">WeMD</span>
+          <div className="logo" aria-label="WeFlow 编辑器">
+            <img className="logo-mark" src={logoSrc} alt="WeFlow Logo" />
+            <span className="logo-text">WeFlow</span>
           </div>
           <span className="header-divider" aria-hidden="true" />
           <nav className="header-nav" aria-label="编辑器设置">

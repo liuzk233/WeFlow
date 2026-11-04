@@ -12,7 +12,7 @@ export function registerWorkspaceHandlers(
     if (!mainWindow) return { success: false, error: "Window not initialized" };
     const result = await dialog.showOpenDialog(mainWindow, {
       properties: ["openDirectory", "createDirectory"],
-      message: "选择 WeMD 工作区文件夹",
+      message: "选择 WeFlow 工作区文件夹",
     });
     if (result.canceled || result.filePaths.length === 0) {
       return { success: false, canceled: true };
