@@ -14,12 +14,14 @@
 
 ### P0｜建立独立项目与运行基线
 
-- [ ] 从 `tenngoxars/WeMD` 克隆源码，保留 Git 历史。
+- [x] 从 `tenngoxars/WeMD` 克隆源码，保留 Git 历史。
 - [x] 创建独立公有仓库 `liuzk233/WeFlow`。
-- [ ] 删除原 `origin`，将 `origin` 设置为 `https://github.com/liuzk233/WeFlow.git`（不要配置 `upstream`）。
-- [ ] 使用 Node.js 22、pnpm 9 安装依赖，启动 Web 端。
-- [ ] 运行现有 lint、test、build，记录基线问题；不为通过检查而随意改业务逻辑。
-- [ ] 审查 GitHub Actions、官方服务域名、发布配置和密钥使用方式；停用不需要的自动发布任务。
+- [x] 删除原 `origin`，将 `origin` 设置为 `https://github.com/liuzk233/WeFlow.git`（不要配置 `upstream`）。
+- [x] 使用 Node.js 22、pnpm 9 安装依赖，启动 Web 端。
+- [x] 运行现有 lint、test、build，记录基线问题；不为通过检查而随意改业务逻辑。
+- [x] 审查 GitHub Actions、官方服务域名、发布配置和密钥使用方式；停用不需要的自动发布任务。
+
+> P0 本地验收已完成：标题、代码块、表格、Mermaid、三张内嵌本地图片的编辑、预览、刷新恢复和富文本复制均已验证。公众号后台验收仍未执行。检查过程、环境限制和外部依赖见 [docs/p0-baseline.md](docs/p0-baseline.md)。
 
 初始化示例（从源码克隆到本地目录 `D:\0_workspace\1_project\WeFlow`；若该目录已包含源码及 Git 历史，跳过克隆和切换目录步骤）：
 
@@ -57,10 +59,10 @@ pnpm dev:web        # http://localhost:5173
 
 ## 3. 每阶段验收
 
-- [ ] `pnpm dev:web` 可正常启动，基础编辑与预览可用。
-- [ ] `pnpm --filter @wemd/web build` 通过；受影响模块的 lint/test 通过。
+- [x] `pnpm dev:web` 可正常启动，基础编辑与预览可用。
+- [x] `pnpm --filter @wemd/web build` 通过；受影响模块的 lint/test 通过。
 - [ ] 复制一篇包含**标题、代码块、表格、Mermaid、3 张图片**的文章到公众号后台，保存草稿、重新打开并检查样式和图片。
-- [ ] 每个功能独立提交，提交说明清楚；不破坏原有功能。
+- [x] 每个功能独立提交，提交说明清楚；不破坏原有功能。
 
 ## 4. 给 Codex 的执行要求
 
