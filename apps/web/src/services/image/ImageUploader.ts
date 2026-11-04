@@ -46,12 +46,12 @@ export class ImageHostManager {
   private async createUploader(
     config: ImageHostConfig,
   ): Promise<ImageUploader> {
-    switch (config.type) {
+    switch (config?.type) {
       case "official": {
         const { OfficialUploader } = await import(
           "./uploaders/OfficialUploader"
         );
-        return new OfficialUploader(config.config);
+        return new OfficialUploader(config?.config);
       }
       case "qiniu": {
         const { QiniuUploader } = await import("./uploaders/QiniuUploader");
@@ -73,7 +73,7 @@ export class ImageHostManager {
         const { OfficialUploader } = await import(
           "./uploaders/OfficialUploader"
         );
-        return new OfficialUploader(config.config);
+        return new OfficialUploader(config?.config);
       }
     }
   }

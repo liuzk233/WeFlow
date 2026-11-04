@@ -26,7 +26,31 @@ interface AllConfigs {
 export function ImageHostSettings() {
   const [allConfigs, setAllConfigs] = useState<AllConfigs>(() => {
     const saved = localStorage.getItem("imageHostConfigs");
-    return saved ? JSON.parse(saved) : { currentType: "official", configs: {} };
+    try {
+      const parsed = saved ? JSON.parse(saved) : null;
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        return {
+          currentType: [
+            "official",
+            "qiniu",
+            "aliyun",
+            "tencent",
+            "s3",
+          ].includes(parsed.currentType)
+            ? parsed.currentType
+            : "official",
+          configs:
+            parsed.configs &&
+            typeof parsed.configs === "object" &&
+            !Array.isArray(parsed.configs)
+              ? parsed.configs
+              : {},
+        };
+      }
+    } catch {
+      // 损坏的旧配置回退到已停用状态，不自动连接图床。
+    }
+    return { currentType: "official", configs: {} };
   });
   const [viewingType, setViewingType] = useState<ImageHostConfig["type"]>(
     allConfigs.currentType,
@@ -87,7 +111,6 @@ export function ImageHostSettings() {
 
   const handleActivate = async (type: ImageHostConfig["type"]) => {
     if (type === "official") {
-      setAllConfigs((prev) => ({ ...prev, currentType: type }));
       return;
     }
 
@@ -150,12 +173,7 @@ export function ImageHostSettings() {
       />
 
       <div className="host-config-panel">
-        {viewingConfig.type === "official" && (
-          <OfficialHostPanel
-            activeType={activeType}
-            onActivate={() => handleActivate("official")}
-          />
-        )}
+        {viewingConfig.type === "official" && <OfficialHostPanel />}
 
         {viewingConfig.type === "qiniu" && (
           <QiniuPanel

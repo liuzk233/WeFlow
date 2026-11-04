@@ -1,12 +1,4 @@
-import {
-  CheckCircle2,
-  CircleAlert,
-  Cloud,
-  Image as ImageIcon,
-  LoaderCircle,
-  ShieldCheck,
-  Zap,
-} from "lucide-react";
+import { CheckCircle2, CircleAlert, Cloud, LoaderCircle } from "lucide-react";
 import type { ImageHostConfig } from "../../services/image/ImageUploader";
 
 export interface HostTabProps {
@@ -57,9 +49,7 @@ export const HostTabs = ({
         onClick={() => onTabChange("official")}
       >
         官方图床
-        {activeType === "official" && (
-          <span className="tab-active-badge">使用中</span>
-        )}
+        <span className="tab-active-badge">已停用</span>
       </button>
       <button
         className={`host-tab ${viewingType === "qiniu" ? "active" : ""}`}
@@ -101,15 +91,7 @@ export const HostTabs = ({
   );
 };
 
-interface OfficialPanelProps {
-  activeType: ImageHostConfig["type"];
-  onActivate: () => void;
-}
-
-export const OfficialHostPanel = ({
-  activeType,
-  onActivate,
-}: OfficialPanelProps) => {
+export const OfficialHostPanel = () => {
   return (
     <div className="official-host-intro">
       <div className="official-host-summary">
@@ -117,54 +99,16 @@ export const OfficialHostPanel = ({
           <Cloud size={48} strokeWidth={1.5} className="primary-icon" />
         </div>
         <div className="intro-copy">
-          <h3>官方托管服务</h3>
-          <p>无需额外配置，直接用于公众号图片上传</p>
-        </div>
-        {activeType === "official" && (
-          <div className="active-status official-active-status">
-            <span className="pulsing-dot"></span>
-            <span>当前已启用官方图床</span>
-          </div>
-        )}
-      </div>
-
-      <div className="official-feature-list" aria-label="官方图床能力">
-        <div className="feature-item">
-          <div className="feature-icon">
-            <Zap size={20} />
-          </div>
-          <div className="feature-text">
-            <strong>高速访问</strong>
-            <span>基于全球边缘网络，加载流畅</span>
-          </div>
-        </div>
-        <div className="feature-item">
-          <div className="feature-icon">
-            <ShieldCheck size={20} />
-          </div>
-          <div className="feature-text">
-            <strong>安全稳定</strong>
-            <span>无需配置 Key，HTTPS 加密传输</span>
-          </div>
-        </div>
-        <div className="feature-item">
-          <div className="feature-icon">
-            <ImageIcon size={20} />
-          </div>
-          <div className="feature-text">
-            <strong>开箱即用</strong>
-            <span>默认集成，专注于内容创作</span>
-          </div>
+          <h3>官方图床已停用</h3>
+          <p>此独立项目不再使用官方托管服务</p>
         </div>
       </div>
-
-      {activeType !== "official" && (
-        <div className="official-host-actions">
-          <button className="btn-activate" onClick={onActivate}>
-            启用官方图床
-          </button>
-        </div>
-      )}
+      <div className="official-feature-list" aria-label="图床配置提示">
+        <p>
+          请配置并启用七牛云、阿里云 OSS、腾讯云 COS 或 S3
+          兼容图床后再上传图片。
+        </p>
+      </div>
     </div>
   );
 };

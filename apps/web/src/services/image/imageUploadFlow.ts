@@ -30,7 +30,17 @@ export function getStoredImageHostConfig(): ImageHostConfig {
   }
 
   try {
-    return JSON.parse(configStr) as ImageHostConfig;
+    const parsed = JSON.parse(configStr) as unknown;
+    if (!parsed || typeof parsed !== "object" || !("type" in parsed)) {
+      return { type: "official" };
+    }
+    const type = parsed.type;
+    if (
+      !["official", "qiniu", "aliyun", "tencent", "s3"].includes(String(type))
+    ) {
+      return { type: "official" };
+    }
+    return parsed as ImageHostConfig;
   } catch {
     return { type: "official" };
   }

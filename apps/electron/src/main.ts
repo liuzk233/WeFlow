@@ -1,7 +1,6 @@
 import { app, BrowserWindow } from "electron";
 import { createMenu } from "./menu";
 import { registerIpcHandlers } from "./ipc";
-import { checkForUpdates } from "./updater";
 import { configureAppIdentity, createWindow } from "./window";
 import { stopWatching } from "./watch/workspaceWatcher";
 import { configureSingleInstance } from "./singleInstance";
@@ -49,10 +48,6 @@ if (isPrimaryInstance) {
   app.whenReady().then(() => {
     openMainWindow();
     createMenu(getMainWindow);
-
-    setTimeout(() => {
-      checkForUpdates(mainWindow);
-    }, 3000);
 
     app.on("activate", () => {
       if (BrowserWindow.getAllWindows().length === 0) {

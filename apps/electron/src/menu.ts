@@ -1,5 +1,4 @@
 import { BrowserWindow, Menu, shell } from "electron";
-import { checkForUpdates } from "./updater";
 
 export function createMenu(getWindow: () => BrowserWindow | null): void {
   const template: Electron.MenuItemConstructorOptions[] = [
@@ -77,8 +76,8 @@ export function createMenu(getWindow: () => BrowserWindow | null): void {
       label: "帮助",
       submenu: [
         {
-          label: "检查更新...",
-          click: () => checkForUpdates(getWindow(), true),
+          label: "检查更新（已停用）",
+          enabled: false,
         },
         { type: "separator" },
         {

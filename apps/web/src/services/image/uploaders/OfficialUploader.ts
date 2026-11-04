@@ -1,46 +1,19 @@
 import type { ImageUploader } from "../ImageUploader";
 
-interface OfficialConfig {
-  serverUrl?: string;
-}
+export const OFFICIAL_HOST_DISABLED_MESSAGE =
+  "官方图床已停用，请在图床设置中配置并启用其他图床";
 
-/**
- * 官方图床（通过 Cloudflare Worker 上传到 R2）
- */
+/** 保留旧配置兼容性；任何入口都不再访问官方服务。 */
 export class OfficialUploader implements ImageUploader {
-  name = "官方图床";
-  private serverUrl: string;
+  name = "官方图床（已停用）";
 
-  constructor(config?: OfficialConfig) {
-    // 默认使用 Cloudflare Worker API
-    this.serverUrl = config?.serverUrl || "https://api.wemd.app";
+  constructor(_config?: { serverUrl?: string }) {}
+
+  async upload(_file: File): Promise<string> {
+    throw new Error(OFFICIAL_HOST_DISABLED_MESSAGE);
   }
 
-  configure(config: OfficialConfig) {
-    if (config.serverUrl) {
-      this.serverUrl = config.serverUrl;
-    }
-  }
-
-  async upload(file: File): Promise<string> {
-    const formData = new FormData();
-    formData.append("file", file);
-
-    const response = await fetch(`${this.serverUrl}/upload`, {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.error || `上传失败: ${response.statusText}`);
-    }
-
-    if (!data.url) {
-      throw new Error("服务器未返回图片地址");
-    }
-
-    return data.url;
+  async validate(): Promise<boolean> {
+    return false;
   }
 }
