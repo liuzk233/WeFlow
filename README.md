@@ -20,6 +20,19 @@ pnpm dev:web
 
 打开 http://localhost:5173 。支持安装为 PWA。生产构建运行 `pnpm --filter @wemd/web build`，桌面开发运行 `pnpm dev:desktop`。
 
+### Windows 一键启动
+
+安装 Node.js 22 和 pnpm 9 后，双击根目录的 `weflow.cmd` 即可后台启动 Web 服务；首次缺少依赖时会自动安装。也可以在 PowerShell 中运行：
+
+```powershell
+.\weflow.cmd start    # 启动（默认操作）
+.\weflow.cmd stop     # 关闭
+.\weflow.cmd restart  # 重启
+.\weflow.cmd status   # 查看运行状态
+```
+
+启动后打开 http://localhost:5173 。关闭命令窗口不会停止服务，请使用 `stop` 关闭。重复启动不会创建多个实例；端口被其他程序占用时会报错。脚本仅管理由它启动的服务，日志保存在 `.tmp/weflow/stdout.log` 和 `.tmp/weflow/stderr.log`。安装或更新依赖仍可手动运行 `pnpm install --frozen-lockfile`。
+
 ## Docker
 
 ```sh
